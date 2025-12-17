@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حساب معدل السداسي الأول قانون إداري ماستر 1 نظام 50/50</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary-color: #6C63FF;
+            --secondary-color: #4A44C6;
+            --dark-bg: #121212;
+            --darker-bg: #0a0a0a;
+            --card-bg: #1e1e1e;
+            --card-border: #333;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --success-color: #4CAF50;
+            --warning-color: #FF9800;
+            --danger-color: #f44336;
+            --info-color: #2196F3;
+        }
+        
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: var(--darker-bg);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* الألعاب النارية */
+        #fireworks-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        header {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 30px 25px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+            background-size: cover;
+        }
+        
+        header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        header p {
+            font-size: 1rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .signature {
+            position: absolute;
+            left: 20px;
+            bottom: 15px;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+            z-index: 1;
+        }
+        
+        .content {
+            padding: 25px;
+        }
+        
+        .intro {
+            background-color: var(--card-bg);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border-right: 5px solid var(--primary-color);
+        }
+        
+        .intro h2 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+        
+        .subjects-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        @media (min-width: 768px) {
+            .subjects-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        .subject-card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid var(--card-border);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .subject-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            border-color: var(--primary-color);
+        }
+        
+        .subject-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--card-border);
+        }
+        
+        .subject-name {
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+        
+        .coefficient {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .input-field {
+            width: 48%;
+        }
+        
+        .input-field.full-width {
+            width: 100%;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: #2a2a2a;
+            border: 2px solid #444;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border 0.3s;
+            color: var(--text-primary);
+        }
+        
+        /* تغيير مؤشر الزيادة/النقصان */
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            height: 40px;
+            opacity: 1;
+        }
+        
+        input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+        
+        .error {
+            color: var(--danger-color);
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .subject-result {
+            background-color: #2a2a2a;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            color: var(--primary-color);
+            display: none;
+            margin-top: 10px;
+        }
+        
+        .controls {
+            text-align: center;
+            margin: 30px 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .calculate-btn {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 16px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(108, 99, 255, 0.4);
+        }
+        
+        .reset-btn {
+            background: linear-gradient(to right, #666, #888);
+            color: white;
+            border: none;
+            padding: 16px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(102, 102, 102, 0.4);
+        }
+        
+        .calculate-btn:hover {
+            background: linear-gradient(to right, var(--secondary-color), #3a36a5);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(108, 99, 255, 0.6);
+        }
+        
+        .reset-btn:hover {
+            background: linear-gradient(to right, #888, #aaa);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(136, 136, 136, 0.6);
+        }
+        
+        .calculate-btn:active, .reset-btn:active {
+            transform: translateY(0);
+        }
+        
+        .results-section {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .results-section h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.5rem;
+        }
+        
+        .subject-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .subject-result-item {
+            background-color: #2a2a2a;
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-right: 4px solid var(--primary-color);
+        }
+        
+        .final-average {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        
+        .alert {
+            background-color: #332b00;
+            border: 1px solid #665800;
+            color: #ffd700;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+        }
+        
+        .advice-section {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 25px;
+            display: none;
+            border-top: 5px solid var(--info-color);
+        }
+        
+        .advice-section h3 {
+            color: var(--info-color);
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 1.3rem;
+        }
+        
+        .advice-content {
+            text-align: center;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+        
+        .quran-verse {
+            background-color: #1a472a;
+            color: #a7ffb3;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-style: italic;
+            text-align: center;
+            border-right: 4px solid #2ecc71;
+        }
+        
+        .social-media {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            padding: 20px 0;
+            border-top: 1px solid var(--card-border);
+        }
+        
+        .social-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background-color: var(--card-bg);
+            border-radius: 50%;
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .social-icon.facebook:hover {
+            background-color: #1877F2;
+            transform: translateY(-5px);
+        }
+        
+        .social-icon.instagram:hover {
+            background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+            transform: translateY(-5px);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 20px;
+            border-top: 1px solid var(--card-border);
+        }
+        
+        .copyright {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: #777;
+        }
+        
+        .creator-info {
+            background-color: rgba(108, 99, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border-right: 3px solid var(--primary-color);
+        }
+        
+        .instructions {
+            background-color: var(--card-bg);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-right: 4px solid var(--primary-color);
+        }
+        
+        .instructions h3 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .instructions ul {
+            padding-right: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+        
+        /* تأثيرات للألعاب النارية */
+        .firework {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #fff;
+            z-index: 0;
+        }
+        
+        /* تحسينات للهواتف */
+        @media (max-width: 768px) {
+            .subject-results {
+                grid-template-columns: 1fr;
+            }
+            
+            .input-row {
+                flex-direction: column;
+            }
+            
+            .input-field {
+                width: 100%;
+                margin-bottom: 15px;
+            }
+            
+            header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .signature {
+                position: relative;
+                left: 0;
+                bottom: 0;
+                margin-top: 10px;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .calculate-btn, .reset-btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="fireworks-canvas"></canvas>
+    
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-calculator"></i> حساب معدل السداسي الأول قانون إداري ماستر 1 نظام 50/50</h1>
+            <p>أدخل نقاط المحاضرة والقسم لكل مقياس، ثم اضغط على زر الحساب للحصول على المعدل</p>
+            <div class="signature">صنع من طرف amraoui sidahmed</div>
+        </header>
+        
+        <div class="content">
+            <div class="intro">
+                <h2><i class="fas fa-info-circle"></i> معلومات عن الحساب</h2>
+                <p>يتم حساب نقطة كل مقياس عن طريق جمع نقطة المحاضرة ونقطة القسم ثم قسمة الناتج على 2. المعدل العام للسداسي = مجموع (نقطة المقياس × المعامل) ÷ مجموع المعاملات (15).</p>
+                <p style="color: var(--warning-color); margin-top: 10px;"><i class="fas fa-exclamation-circle"></i> ملاحظة: مقاييس (الدولة القانونية، اللغة الإنجليزية، القضاء الإداري) تحتاج فقط إلى نقطة المحاضرة (COUR).</p>
+            </div>
+            
+            <div class="alert" id="alert-message">
+                <i class="fas fa-exclamation-triangle"></i> يرجى إكمال جميع الحقول بشكل صحيح قبل الحساب.
+            </div>
+            
+            <div class="subjects-container" id="subjects-container">
+                <!-- سيتم إضافة حقول المقاييس ديناميكيًا باستخدام JavaScript -->
+            </div>
+            
+            <div class="controls">
+                <button class="calculate-btn" id="calculate-btn">
+                    <i class="fas fa-calculator"></i> احسب المعدل
+                </button>
+                <button class="reset-btn" id="reset-btn">
+                    <i class="fas fa-redo"></i> إعادة تعيين
+                </button>
+            </div>
+            
+            <div class="results-section" id="results-section">
+                <h2><i class="fas fa-chart-line"></i> نتائج الحساب</h2>
+                
+                <div class="subject-results" id="subject-results">
+                    <!-- ستظهر نتائج المقاييس هنا -->
+                </div>
+                
+                <div class="final-average" id="final-average">
+                    معدل السداسي الأول هو: <span id="semester-average">0.00</span> / 20
+                </div>
+            </div>
+            
+            <div class="advice-section" id="advice-section">
+                <h3><i class="fas fa-hands-helping"></i> نصيحة للطالب</h3>
+                <div class="advice-content" id="advice-content"></div>
+                <div class="quran-verse" id="quran-verse"></div>
+            </div>
+            
+            <div class="instructions">
+                <h3><i class="fas fa-lightbulb"></i> تعليمات الاستخدام</h3>
+                <ul>
+                    <li>أدخل علامة المحاضرة (COUR) وعلامة القسم (TD) لكل مقياس (من 0 إلى 20).</li>
+                    <li>المقاييس: (الدولة القانونية، اللغة الإنجليزية، القضاء الإداري) تحتاج فقط إلى نقطة المحاضرة (COUR).</li>
+                    <li>يجب أن تكون العلامات بين 0 و 20 فقط.</li>
+                    <li>استخدم أزرار الزيادة/النقصان في الحقول لتغيير القيم بمقدار 0.25.</li>
+                    <li>اضغط على زر "احسب المعدل" للحصول على النتائج.</li>
+                    <li>اضغط على زر "إعادة تعيين" لمسح جميع الحقول والنتائج.</li>
+                    <li>المعاملات: الإدارة المركزية (3)، قضاء الإلغاء (3)، المؤسسة والمرفق العام (3)، منهجية البحث العلمي (2)، باقي المقاييس (1 لكل منها).</li>
+                </ul>
+            </div>
+            
+            <div class="social-media">
+                <a href="https://facebook.com/20031219k" target="_blank" class="social-icon facebook">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="https://www.instagram.com/amraoui_sidahmed" target="_blank" class="social-icon instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+            
+            <div class="creator-info">
+                <p><i class="fas fa-user-circle"></i> تم انشاء هذا الموقع من طرف الطالب عمراوي سيداحمد</p>
+                <p><i class="fas fa-envelope"></i> للتواصل اضغط على المواقع اعلاه</p>
+                <p><i class="fas fa-hands-praying"></i> لا تبخلونا من صالح الدعاء</p>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 حساب المعدل الجامعي - قانون إداري ماستر 1 نظام 50/50</p>
+            <p>تم التطوير خصيصاً لحساب معدل السداسي الأول لطلبة ماستر قانون إداري</p>
+            <div class="copyright">
+                جميع الحقوق محفوظة © 2023 | صمم بـ <i class="fas fa-heart" style="color: #e74c3c;"></i> من طرف عمراوي سيداحمد
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // تعريف المقاييس والمعاملات (الثابتة في الكود)
+        // ملاحظة: المقاييس الثلاثة الأخيرة لها فقط نقطة محاضرة
+        const subjects = [
+            { id: 'admin_central', name: 'الإدارة المركزية', coefficient: 3, hasSection: true },
+            { id: 'annulment_judgment', name: 'قضاء الإلغاء', coefficient: 3, hasSection: true },
+            { id: 'institution_public_service', name: 'المؤسسة والمرفق العام', coefficient: 3, hasSection: true },
+            { id: 'research_methodology', name: 'منهجية البحث العلمي', coefficient: 2, hasSection: true },
+            { id: 'administrative_writing', name: 'التحرير الإداري', coefficient: 1, hasSection: true },
+            { id: 'administrative_judiciary', name: 'القضاء الإداري', coefficient: 1, hasSection: false }, // فقط محاضرة
+            { id: 'rule_of_law', name: 'الدولة القانونية', coefficient: 1, hasSection: false }, // فقط محاضرة
+            { id: 'english', name: 'اللغة الأجنبية الإنجليزية', coefficient: 1, hasSection: false } // فقط محاضرة
+        ];
+
+        // نصائح للطلاب
+        const adviceMessages = {
+            success: {
+                advice: "مبارك النجاح! استمر في الإتقان والتركيز على المقاييس ذات المعاملات الكبيرة في السداسي الثاني لتحقيق معدل أعلى، وحافظ على التوازن بين الدراسة والراحة.",
+                verse: "فَاذْكُرُونِي أَذْكُرْكُمْ وَاشْكُرُوا لِي وَلَا تَكْفُرُونِ",
+                source: "(البقرة: 152)"
+            },
+            failure: {
+                advice: "لا تيأس من النتيجة، ركز على تحسين الدراسة بالتركيز والتنظيم، وابدأ بمراجعة الضعف في المقاييس ذات المعاملات العالية مثل الإدارة المركزية وقضاء الإلغاء، فالسداسي الثاني فرصة جديدة للتميز.",
+                verse: "وَعَسَىٰ أَن تَكْرَهُوا شَيْئًا وَهُوَ خَيْرٌ لَّكُمْ ۖ وَعَسَىٰ أَن تُحِبُّوا شَيْئًا وَهُوَ شَرٌّ لَّكُمْ ۗ وَاللَّهُ يَعْلَمُ وَأَنتُمْ لَا تَعْلَمُونَ",
+                source: "(البقرة: 216)"
+            }
+        };
+
+        // إنشاء واجهة إدخال البيانات للمقاييس
+        function createSubjectInputs() {
+            const container = document.getElementById('subjects-container');
+            
+            subjects.forEach(subject => {
+                const subjectCard = document.createElement('div');
+                subjectCard.className = 'subject-card';
+                subjectCard.id = `card-${subject.id}`;
+                
+                // بناء HTML بناءً على ما إذا كان المقياس يحتاج قسم أم لا
+                let inputFields = '';
+                if (subject.hasSection) {
+                    inputFields = `
+                        <div class="input-row">
+                            <div class="input-field">
+                                <label for="${subject.id}-lecture">نقطة COUR</label>
+                                <input type="number" min="0" max="20" step="0.25" id="${subject.id}-lecture" placeholder="0 - 20">
+                                <div class="error" id="${subject.id}-lecture-error">الرجاء إدخال علامة بين 0 و20</div>
+                            </div>
+                            <div class="input-field">
+                                <label for="${subject.id}-section">نقطة TD</label>
+                                <input type="number" min="0" max="20" step="0.25" id="${subject.id}-section" placeholder="0 - 20">
+                                <div class="error" id="${subject.id}-section-error">الرجاء إدخال علامة بين 0 و20</div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    inputFields = `
+                        <div class="input-row">
+                            <div class="input-field full-width">
+                                <label for="${subject.id}-lecture">نقطة COUR فقط (لا يوجد TD)</label>
+                                <input type="number" min="0" max="20" step="0.25" id="${subject.id}-lecture" placeholder="0 - 20">
+                                <div class="error" id="${subject.id}-lecture-error">الرجاء إدخال علامة بين 0 و20</div>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                subjectCard.innerHTML = `
+                    <div class="subject-header">
+                        <div class="subject-name">${subject.name}</div>
+                        <div class="coefficient">معامل ${subject.coefficient}</div>
+                    </div>
+                    <div class="input-group">
+                        ${inputFields}
+                    </div>
+                    <div class="subject-result" id="${subject.id}-result">
+                        نقطة المقياس: <span id="${subject.id}-calculated">0.00</span> / 20
+                    </div>
+                `;
+                
+                container.appendChild(subjectCard);
+                
+                // إضافة مستمعي الأحداث للتحقق من صحة الإدخال
+                const lectureInput = document.getElementById(`${subject.id}-lecture`);
+                const lectureError = document.getElementById(`${subject.id}-lecture-error`);
+                
+                lectureInput.addEventListener('input', () => validateInput(lectureInput, lectureError));
+                
+                // إذا كان المقياس يحتوي على قسم
+                if (subject.hasSection) {
+                    const sectionInput = document.getElementById(`${subject.id}-section`);
+                    const sectionError = document.getElementById(`${subject.id}-section-error`);
+                    sectionInput.addEventListener('input', () => validateInput(sectionInput, sectionError));
+                }
+                
+                // إضافة مؤشرات الزيادة/النقصان المخصصة
+                addIncrementDecrementListeners(subject.id);
+            });
+        }
+
+        // إضافة مؤشرات الزيادة/النقصان لقيم الحقول
+        function addIncrementDecrementListeners(subjectId) {
+            const lectureInput = document.getElementById(`${subjectId}-lecture`);
+            
+            // زيادة القيمة عند النقر والسحب لأعلى
+            lectureInput.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                const step = 0.25;
+                let currentValue = parseFloat(lectureInput.value) || 0;
+                
+                if (e.deltaY < 0) {
+                    // التمرير لأعلى - زيادة
+                    currentValue = Math.min(20, currentValue + step);
+                } else {
+                    // التمرير لأسفل - نقصان
+                    currentValue = Math.max(0, currentValue - step);
+                }
+                
+                lectureInput.value = currentValue.toFixed(2);
+                validateInput(lectureInput, document.getElementById(`${subjectId}-lecture-error`));
+            });
+            
+            // إذا كان المقياس يحتوي على قسم، أضف نفس الميزة لحقل TD
+            const subject = subjects.find(s => s.id === subjectId);
+            if (subject.hasSection) {
+                const sectionInput = document.getElementById(`${subjectId}-section`);
+                
+                sectionInput.addEventListener('wheel', (e) => {
+                    e.preventDefault();
+                    const step = 0.25;
+                    let currentValue = parseFloat(sectionInput.value) || 0;
+                    
+                    if (e.deltaY < 0) {
+                        // التمرير لأعلى - زيادة
+                        currentValue = Math.min(20, currentValue + step);
+                    } else {
+                        // التمرير لأسفل - نقصان
+                        currentValue = Math.max(0, currentValue - step);
+                    }
+                    
+                    sectionInput.value = currentValue.toFixed(2);
+                    validateInput(sectionInput, document.getElementById(`${subjectId}-section-error`));
+                });
+            }
+        }
+
+        // التحقق من صحة الإدخال
+        function validateInput(input, errorElement) {
+            const value = parseFloat(input.value);
+            
+            if (input.value === '') {
+                errorElement.style.display = 'none';
+                input.style.borderColor = '#444';
+                return true;
+            }
+            
+            if (isNaN(value) || value < 0 || value > 20) {
+                errorElement.style.display = 'block';
+                input.style.borderColor = 'var(--danger-color)';
+                return false;
+            } else {
+                errorElement.style.display = 'none';
+                input.style.borderColor = 'var(--primary-color)';
+                return true;
+            }
+        }
+
+        // التحقق من جميع الحقول
+        function validateAllFields() {
+            let isValid = true;
+            const alertMessage = document.getElementById('alert-message');
+            
+            subjects.forEach(subject => {
+                const lectureInput = document.getElementById(`${subject.id}-lecture`);
+                const lectureError = document.getElementById(`${subject.id}-lecture-error`);
+                
+                if (!validateInput(lectureInput, lectureError)) {
+                    isValid = false;
+                }
+                
+                // التحقق من أن حقل المحاضرة غير فارغ
+                if (lectureInput.value === '') {
+                    isValid = false;
+                    alertMessage.style.display = 'block';
+                }
+                
+                // إذا كان المقياس يحتوي على قسم، تحقق منه أيضًا
+                if (subject.hasSection) {
+                    const sectionInput = document.getElementById(`${subject.id}-section`);
+                    const sectionError = document.getElementById(`${subject.id}-section-error`);
+                    
+                    if (!validateInput(sectionInput, sectionError)) {
+                        isValid = false;
+                    }
+                    
+                    if (sectionInput.value === '') {
+                        isValid = false;
+                        alertMessage.style.display = 'block';
+                    }
+                }
+            });
+            
+            if (isValid) {
+                alertMessage.style.display = 'none';
+            }
+            
+            return isValid;
+        }
+
+        // إعادة تعيين جميع الحقول
+        function resetAllFields() {
+            subjects.forEach(subject => {
+                const lectureInput = document.getElementById(`${subject.id}-lecture`);
+                lectureInput.value = '';
+                lectureInput.style.borderColor = '#444';
+                
+                const lectureError = document.getElementById(`${subject.id}-lecture-error`);
+                lectureError.style.display = 'none';
+                
+                if (subject.hasSection) {
+                    const sectionInput = document.getElementById(`${subject.id}-section`);
+                    sectionInput.value = '';
+                    sectionInput.style.borderColor = '#444';
+                    
+                    const sectionError = document.getElementById(`${subject.id}-section-error`);
+                    sectionError.style.display = 'none';
+                }
+                
+                // إخفاء نتائج المقياس
+                const resultElement = document.getElementById(`${subject.id}-result`);
+                resultElement.style.display = 'none';
+            });
+            
+            // إخفاء قسم النتائج والنصائح
+            document.getElementById('results-section').style.display = 'none';
+            document.getElementById('advice-section').style.display = 'none';
+            
+            // إيقاف الألعاب النارية إذا كانت نشطة
+            fireworksActive = false;
+            fireworks = [];
+            particles = [];
+            
+            // إخفاء رسالة التنبيه
+            document.getElementById('alert-message').style.display = 'none';
+            
+            // إعادة التركيز على أول حقل إدخال
+            document.getElementById('admin_central-lecture').focus();
+        }
+
+        // حساب المعدل
+        function calculateAverage() {
+            if (!validateAllFields()) {
+                return;
+            }
+            
+            let weightedSum = 0;
+            const subjectResults = [];
+            
+            // حساب نقطة كل مقياس والمجموع المرجح
+            subjects.forEach(subject => {
+                const lectureMark = parseFloat(document.getElementById(`${subject.id}-lecture`).value);
+                let moduleGrade;
+                
+                // حساب نقطة المقياس بناءً على وجود القسم
+                if (subject.hasSection) {
+                    const sectionMark = parseFloat(document.getElementById(`${subject.id}-section`).value);
+                    // حساب نقطة المقياس = (المحاضرة + القسم) ÷ 2
+                    moduleGrade = (lectureMark + sectionMark) / 2;
+                } else {
+                    // إذا كان المقياس بدون قسم، فإن نقطة المقياس = نقطة المحاضرة فقط
+                    moduleGrade = lectureMark;
+                }
+                
+                // تقريب إلى منزلتين عشريتين
+                const roundedGrade = Math.round(moduleGrade * 100) / 100;
+                
+                // حساب المساهمة في المجموع المرجح
+                const weightedContribution = roundedGrade * subject.coefficient;
+                weightedSum += weightedContribution;
+                
+                // تخزين نتيجة المقياس
+                subjectResults.push({
+                    name: subject.name,
+                    grade: roundedGrade,
+                    coefficient: subject.coefficient,
+                    weighted: weightedContribution
+                });
+                
+                // عرض نتيجة المقياس في بطاقة الإدخال
+                const resultElement = document.getElementById(`${subject.id}-result`);
+                const calculatedElement = document.getElementById(`${subject.id}-calculated`);
+                calculatedElement.textContent = roundedGrade.toFixed(2);
+                resultElement.style.display = 'block';
+            });
+            
+            // حساب المعدل العام للسداسي = المجموع المرجح ÷ مجموع المعاملات (15)
+            const semesterAverage = weightedSum / 15;
+            const roundedAverage = Math.round(semesterAverage * 100) / 100;
+            
+            // عرض النتائج
+            displayResults(subjectResults, roundedAverage);
+            
+            // إظهار النصائح والآيات القرآنية بناءً على المعدل
+            showAdvice(roundedAverage);
+            
+            // تشغيل الألعاب النارية إذا كان المعدل فوق 10
+            if (roundedAverage >= 10) {
+                startFireworks();
+            }
+        }
+
+        // عرض النتائج النهائية
+        function displayResults(subjectResults, semesterAverage) {
+            const resultsSection = document.getElementById('results-section');
+            const subjectResultsContainer = document.getElementById('subject-results');
+            const semesterAverageElement = document.getElementById('semester-average');
+            
+            // تفريغ نتائج المقاييس السابقة
+            subjectResultsContainer.innerHTML = '';
+            
+            // إضافة نتائج كل مقياس
+            subjectResults.forEach(result => {
+                const resultItem = document.createElement('div');
+                resultItem.className = 'subject-result-item';
+                resultItem.innerHTML = `
+                    <div>${result.name}</div>
+                    <div><strong>${result.grade.toFixed(2)}</strong> / 20 (معامل ${result.coefficient})</div>
+                `;
+                subjectResultsContainer.appendChild(resultItem);
+            });
+            
+            // عرض المعدل النهائي
+            semesterAverageElement.textContent = semesterAverage.toFixed(2);
+            
+            // إضافة لون حسب المعدل
+            const finalAverageElement = document.getElementById('final-average');
+            if (semesterAverage >= 10) {
+                finalAverageElement.style.background = 'linear-gradient(to right, var(--success-color), #2ecc71)';
+            } else {
+                finalAverageElement.style.background = 'linear-gradient(to right, var(--danger-color), #e74c3c)';
+            }
+            
+            // إظهار قسم النتائج
+            resultsSection.style.display = 'block';
+            
+            // التمرير إلى النتائج
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // إظهار النصائح والآيات القرآنية
+        function showAdvice(average) {
+            const adviceSection = document.getElementById('advice-section');
+            const adviceContent = document.getElementById('advice-content');
+            const quranVerse = document.getElementById('quran-verse');
+            
+            // اختيار نصيحة بناءً على المعدل
+            let adviceData;
+            
+            if (average >= 10) {
+                adviceData = adviceMessages.success;
+            } else {
+                adviceData = adviceMessages.failure;
+            }
+            
+            // عرض النصيحة والآية
+            adviceContent.innerHTML = adviceData.advice;
+            quranVerse.innerHTML = `"${adviceData.verse}"<br><small>${adviceData.source}</small>`;
+            
+            // إظهار قسم النصائح
+            adviceSection.style.display = 'block';
+            
+            // التمرير إلى النصائح
+            setTimeout(() => {
+                adviceSection.scrollIntoView({ behavior: 'smooth' });
+            }, 500);
+        }
+
+        // تهيئة الصفحة عند التحميل
+        document.addEventListener('DOMContentLoaded', function() {
+            createSubjectInputs();
+            
+            // إضافة مستمع حدث لزر الحساب
+            const calculateBtn = document.getElementById('calculate-btn');
+            calculateBtn.addEventListener('click', calculateAverage);
+            
+            // إضافة مستمع حدث لزر إعادة التعيين
+            const resetBtn = document.getElementById('reset-btn');
+            resetBtn.addEventListener('click', resetAllFields);
+            
+            // إضافة إمكانية استخدام زر Enter للحساب
+            document.addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    calculateAverage();
+                }
+            });
+            
+            // تعبئة عينة بيانات للاختبار (يمكن حذفها)
+            // fillSampleData();
+        });
+
+        // وظيفة لملء بيانات عينة (للاختبار فقط)
+        function fillSampleData() {
+            const sampleData = {
+                'admin_central': { lecture: 14.5, section: 15.25 },
+                'annulment_judgment': { lecture: 13.75, section: 14.25 },
+                'institution_public_service': { lecture: 12.5, section: 13.75 },
+                'research_methodology': { lecture: 15.25, section: 16.5 },
+                'administrative_writing': { lecture: 14.25, section: 15.5 },
+                'administrative_judiciary': { lecture: 16.75, section: 0 },
+                'rule_of_law': { lecture: 15.5, section: 0 },
+                'english': { lecture: 17.25, section: 0 }
+            };
+            
+            subjects.forEach(subject => {
+                const data = sampleData[subject.id];
+                if (data) {
+                    document.getElementById(`${subject.id}-lecture`).value = data.lecture;
+                    
+                    if (subject.hasSection) {
+                        document.getElementById(`${subject.id}-section`).value = data.section;
+                        
+                        // التحقق من صحة الإدخال بعد تعبئة البيانات
+                        const sectionError = document.getElementById(`${subject.id}-section-error`);
+                        validateInput(document.getElementById(`${subject.id}-section`), sectionError);
+                    }
+                    
+                    // التحقق من صحة الإدخال بعد تعبئة البيانات
+                    const lectureError = document.getElementById(`${subject.id}-lecture-error`);
+                    validateInput(document.getElementById(`${subject.id}-lecture`), lectureError);
+                }
+            });
+        }
+
+        // ==================== كود الألعاب النارية ====================
+        let fireworksActive = false;
+        const canvas = document.getElementById('fireworks-canvas');
+        const ctx = canvas.getContext('2d');
+        let fireworks = [];
+        let particles = [];
+
+        // ضبط حجم الكانفاس
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        // إنشاء لعبة نارية
+        class Firework {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height;
+                this.targetX = Math.random() * canvas.width;
+                this.targetY = Math.random() * (canvas.height / 2);
+                this.speed = 2 + Math.random() * 2;
+                this.velocityX = (this.targetX - this.x) / 100;
+                this.velocityY = -this.speed;
+                this.gravity = 0.02;
+                this.hue = Math.floor(Math.random() * 360);
+                this.brightness = 70;
+                this.alpha = 1;
+                this.exploded = false;
+            }
+            
+            update() {
+                this.velocityY += this.gravity;
+                this.x += this.velocityX;
+                this.y += this.velocityY;
+                
+                // إذا وصلت إلى الهدف، تنفجر
+                if (this.velocityY >= 0 && !this.exploded) {
+                    this.explode();
+                }
+                
+                // اختفاء الألعاب النارية بعد انتهائها
+                if (this.exploded) {
+                    this.alpha -= 0.01;
+                }
+                
+                return this.alpha > 0;
+            }
+            
+            explode() {
+                this.exploded = true;
+                const particleCount = 80 + Math.floor(Math.random() * 50);
+                
+                for (let i = 0; i < particleCount; i++) {
+                    particles.push(new Particle(this.x, this.y, this.hue));
+                }
+            }
+            
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.fillStyle = `hsl(${this.hue}, 100%, ${this.brightness}%)`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        // إنشاء جسيمات للألعاب النارية
+        class Particle {
+            constructor(x, y, hue) {
+                this.x = x;
+                this.y = y;
+                this.hue = hue;
+                this.speed = 2 + Math.random() * 4;
+                this.angle = Math.random() * Math.PI * 2;
+                this.velocityX = Math.cos(this.angle) * this.speed;
+                this.velocityY = Math.sin(this.angle) * this.speed;
+                this.gravity = 0.05;
+                this.friction = 0.97;
+                this.alpha = 1;
+                this.decay = 0.015 + Math.random() * 0.01;
+            }
+            
+            update() {
+                this.velocityX *= this.friction;
+                this.velocityY *= this.friction;
+                this.velocityY += this.gravity;
+                this.x += this.velocityX;
+                this.y += this.velocityY;
+                this.alpha -= this.decay;
+                
+                return this.alpha > 0;
+            }
+            
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.fillStyle = `hsl(${this.hue}, 100%, 60%)`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        // تشغيل الألعاب النارية
+        function startFireworks() {
+            if (fireworksActive) return;
+            
+            fireworksActive = true;
+            resizeCanvas();
+            
+            // إنشاء 5 ألعاب نارية أولية
+            for (let i = 0; i < 5; i++) {
+                fireworks.push(new Firework());
+            }
+            
+            // بدء دورة الرسوم المتحركة
+            animateFireworks();
+            
+            // إضافة ألعاب نارية جديدة كل ثانية
+            const interval = setInterval(() => {
+                if (fireworksActive) {
+                    fireworks.push(new Firework());
+                } else {
+                    clearInterval(interval);
+                }
+            }, 1000);
+            
+            // إيقاف الألعاب النارية بعد 10 ثوانٍ
+            setTimeout(() => {
+                fireworksActive = false;
+                setTimeout(() => {
+                    fireworks = [];
+                    particles = [];
+                }, 2000);
+            }, 10000);
+        }
+
+        // رسم الألعاب النارية
+        function animateFireworks() {
+            if (!fireworksActive && fireworks.length === 0 && particles.length === 0) return;
+            
+            // مسح الكانفاس مع تأثير التلاشي
+            ctx.fillStyle = 'rgba(18, 18, 18, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // تحديث ورسم الألعاب النارية
+            for (let i = fireworks.length - 1; i >= 0; i--) {
+                if (!fireworks[i].update()) {
+                    fireworks.splice(i, 1);
+                } else {
+                    fireworks[i].draw();
+                }
+            }
+            
+            // تحديث ورسم الجسيمات
+            for (let i = particles.length - 1; i >= 0; i--) {
+                if (!particles[i].update()) {
+                    particles.splice(i, 1);
+                } else {
+                    particles[i].draw();
+                }
+            }
+            
+            // استمرار الرسم إذا كانت الألعاب النارية لا تزال نشطة
+            if (fireworksActive || fireworks.length > 0 || particles.length > 0) {
+                requestAnimationFrame(animateFireworks);
+            }
+        }
+
+        // إعادة ضبط حجم الكانفاس عند تغيير حجم النافذة
+        window.addEventListener('resize', resizeCanvas);
+        // ==================== نهاية كود الألعاب النارية ====================
+    </script>
+</body>
+</html>
